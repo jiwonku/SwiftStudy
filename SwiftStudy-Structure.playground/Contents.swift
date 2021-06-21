@@ -107,3 +107,49 @@ struct ClimateControl2 {
 
 //temperature 멤버가 초기값을 가지고 있기 때문에 패러미터 값을 생략할 수 있습니다.
 let test = ClimateControl2()
+
+
+
+
+
+
+/*
+ 구조체는 소위 value 타입으로 불립니다. value 타입은 할당될 때 복사가 되는 객체나 데이터를 말합니다.
+ */
+
+var range1: DeliveryRange = DeliveryRange(range: 200, center: Location(latitude: 44.5, longitude: -96.3))
+var range2: DeliveryRange = range1
+
+print(range1.range) // 200
+print(range2.range) // 200
+
+// range2에 range1을 할당했을때 복사가 일어남.
+
+range1.range = 100
+
+print(range1.range) // 100
+print(range2.range) // 200
+
+
+
+
+
+
+
+//구조체는 상수와 변수 멤버를 가지는 것 처럼 함수를 가질 수 있습니다.
+struct checkStructMethod {
+  var name: String
+
+  func printName() {
+    print(name)
+   }
+}
+
+
+var testName = checkStructMethod(name:"jason")
+
+testName.printName()
+
+testName.name = "Tom"
+
+testName.printName()
