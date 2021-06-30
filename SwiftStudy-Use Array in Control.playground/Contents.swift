@@ -41,11 +41,15 @@ func selectAnimal(animal : String) {
 }
 
 
-selectAnimal(animal: "pig") // pig
+for animal in animalArray {
+    selectAnimal(animal: animal)
+}
 
-selectAnimal(animal: "monkey") // monkey
-
-selectAnimal(animal: "ant") // It is not included
+//selectAnimal(animal: "pig") // pig
+//
+//selectAnimal(animal: "monkey") // monkey
+//
+//selectAnimal(animal: "ant") // It is not included
 
 
 
@@ -57,8 +61,6 @@ for num in nums {
 }
 
 
-
-
 nums.forEach {
     print($0) //  1 2 3 4
 }
@@ -68,7 +70,7 @@ var i : Int = 0
 var result : Int = 0
 
 while i < nums.count {
-    result += nums[i]
+    result += nums[i] // result = result + nums[i]
     i += 1
 }
 
