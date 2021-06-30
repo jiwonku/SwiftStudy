@@ -45,7 +45,7 @@ selectAnimal(animal: "pig") // pig
 
 selectAnimal(animal: "monkey") // monkey
 
-
+selectAnimal(animal: "ant") // It is not included
 
 
 
@@ -72,5 +72,24 @@ while i < nums.count {
     i += 1
 }
 
-print("total sum is \(result)")
+print("total sum is \(result)") // total sum is 10
+
+
+
+
+
+func checkNum(num : Int) {
+    
+    guard num > 2 else {
+        print("not bigger than 2")
+        return;
+    }
+    
+    print("bigger than 2")
+}
+
+for i in nums {
+    checkNum(num: i)
+}
+
 
