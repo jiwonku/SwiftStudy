@@ -81,7 +81,7 @@ switch approxi{
 case 0...50:
     print("0...50")
 case 51...100:
-    print("0...50")
+    print("51...100")
 default:
     print("others")
 }

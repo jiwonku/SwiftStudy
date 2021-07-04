@@ -315,3 +315,18 @@ func foo() -> Int {
 }
 
 foo()
+
+
+func isMinor(age : Int) -> Bool {
+    
+    if age > 19{
+        return true
+    }
+        
+    else {
+        return false
+    }
+}
+
+
+isMinor(age: 20)
