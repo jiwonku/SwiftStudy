@@ -329,3 +329,70 @@ divide(base:30 , success : {
 )
 
 
+// 파라미터와 리턴 타입이 없는 클로저
+let closure = { () -> () in
+    print("Closure")
+}
+
+
+// 파라미터와 리턴 타입이 있는 클로저
+let closure2 = { (name:String) -> String in
+    return "Hello, \(name)"
+}
+// 클로저에서는 인자 레이블을 사용하지 않는다. , name은 파라미터 이름이다.
+
+closure2("jason") // "Hello, jason"
+
+
+
+/*
+ 1. 클로저를 변수나 상수에 대입할 수 있다.
+ 2. 함수의 파라미터 타입으로 클로저를 전달할 수 있다.
+ 3. 함수의 반환 타입으로 클로저르ㄹ 사용할 수 있다.
+ */
+
+
+
+// 파라미터로 클로저를 넘겨줄 수 있다.
+// doSomething을 호출하면서 클로저를 작성하여 파라미터로 넘겨 주었고, doSomething 안에서 전달받은 클로저를 호출한다.
+
+func doSomething(closure: () -> Void) {
+    closure()
+}
+
+doSomething(closure: { () -> Void in
+    print("Hello!")
+})
+
+
+
+
+// 클로저를 리턴할 수 있음.
+
+//func doSomething2() -> () -> () {
+//}
+
+func doSomething3() -> () -> () {
+    return { () -> () in
+        print("hello world")
+    }
+}
+
+let closure3 = doSomething3()
+closure3() // hello world
+
+// () 는 호출 구문이다.
+
+
+
+
+
+
+
+/*
+ 트레일링 클로저 :
+ 함수의 마지막 파라미터가 클로저 일 때, 이를 파라미터 값 형식이 아닌 함수 뒤에 붙여 작성하는 문법.
+ 인자 레이블은 생략된다.
+ */
+
+
