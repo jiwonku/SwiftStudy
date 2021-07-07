@@ -348,7 +348,7 @@ closure2("jason") // "Hello, jason"
 /*
  1. 클로저를 변수나 상수에 대입할 수 있다.
  2. 함수의 파라미터 타입으로 클로저를 전달할 수 있다.
- 3. 함수의 반환 타입으로 클로저르ㄹ 사용할 수 있다.
+ 3. 함수의 반환 타입으로 클로저를 사용할 수 있다.
  */
 
 
@@ -364,6 +364,7 @@ doSomething(closure: { () -> Void in
     print("Hello!")
 })
 
+// inline closure : 클로저가 함수 호출 구문 () 안에 작성되어 있는 것.
 
 
 
@@ -381,7 +382,7 @@ func doSomething3() -> () -> () {
 let closure3 = doSomething3()
 closure3() // hello world
 
-// () 는 호출 구문이다.
+// () 는 호출 구문
 
 
 
@@ -395,4 +396,114 @@ closure3() // hello world
  인자 레이블은 생략된다.
  */
 
+doSomething () { () -> Void in
+    print("hello")
+}
 
+// 위에서 함수 호출구문() 도 생략할 수 있음.
+doSomething { () -> Void in
+    print("hello")
+}
+
+
+
+
+func fetchData(success: () -> (), fail: () -> ()) {
+    
+}
+
+fetchData(success : { () -> Void in
+    print("success")
+},fail: { () -> Void in
+    print("fail")
+})
+
+// 파라미터가 여러개일 경우에는 함수 호출 구문()을 생략하면 안된다.
+// 첫 번째 파라미터(success)는 파라미터 값 타입으로 넘겨주어야 함.
+fetchData(success: { () -> Void in
+    print("success")
+}) { () -> Void in
+    print("fail")
+}
+
+
+
+
+
+
+
+func doSomething(closure: (Int, Int, Int) -> Int) {
+    closure(1,2,3) // 6
+}
+
+doSomething(closure: { (a:Int, b:Int, c:Int) -> Int in
+    return a+b+c // 6
+})
+
+doSomething(closure: {
+    return $0 + $1 + $2 // 6
+})
+
+/*
+ Shortand Argument Names :
+ 
+ 위에서 a b c 라는 파라미터 이름 대신
+ a -> $0
+ b -> $1
+ c -> $2
+ 이런 식으로 $와 index를 이용해 파라미터에 순서대로 접근하는 것.
+ $의 갯수는 파라미터의 갯수만큼 있음.
+ */
+
+// 단일 return문일 경우 return도 생략이 가능하다 , 하지만 단일 리턴문이 아니면 에러가 발생한다.
+doSomething(closure: {
+//    print("hello")  해당 구문을 추가하면 아래 구문에서 에러 발생
+    $0 + $1 + $2 // 6
+})
+
+// 그리고 위 구문은 하기와 같이 트레일링 클로저로 표현 가능하다.
+// 파라미터가 하나인 경우 () 생략 가능
+doSomething {
+    $0 + $1 + $2
+}
+
+
+
+
+
+
+
+/*
+ autoClosure
+ 파라미터로 전달된 일반 구문 & 함수를 클로저로 래핑(wrapping) 하는 것.
+ */
+
+// closure란 파라미터는 실제 클로저를 전달받지 않지만, 클로저처럼 사용이 가능하다.
+// 다만 클로저와 다른 점은 실제 클로저를 전달하는 것이 아니기 때문에 파라미터로 값을 넘기는 것 처럼 ()를 통해 구문을 넘겨줄수가 있음.
+// autoclosure는 파라미터 함수 타입 정의 바로 앞에다가 붙여야 한다.
+
+
+func doSomeThing2(closure : @autoclosure () -> Bool) {
+    closure()
+}
+
+doSomeThing2(closure: 1 > 2)
+
+
+var customersInLine = ["Chris", "Alex", "Ewa", "Barry", "Daniella"]
+
+func serve(customer customerProvider : @autoclosure () -> String) {
+    print("now serving \(customerProvider())")
+}
+
+// 위의 serve에서 autoclosure 키워드를 사용했기에 하기 구문에서 중괄호로 감싸지 않아도 실행 가능하다
+
+serve(customer: customersInLine.remove(at: 0))
+
+
+// autoclosure를 사용할 경우 반드시 파라미터가 없어야 한다.
+// 하기 구문은 에러가 발생한다.
+
+//func doSomeThing2(closure : @autoclosure (Int) -> Bool) {
+//    closure()
+//}
