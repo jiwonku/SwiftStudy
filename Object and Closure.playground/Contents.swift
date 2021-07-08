@@ -317,6 +317,13 @@ divide(base: 0, success: successThrough, fail: failThrough) // 0 , cal is fail
  일회용 함수
  함수의 형태를 가지지만 이름이 부여되지 않으며, 일회용이기 때문에 여러가지 간편한 작성 형식을 따른다.
  위의 예제에서 재사용하지 않는 코드는 굳이 함수로 작성한다면 비능률적이되기에 이와 같은 익명 함수를 사용한다.
+ 
+ 사용자의 코드 안에서 전달되어 사용할 수 있는 로직을 가진 중괄호{} 로 구분된 코드의 블럭이며 일급 객체의 역할을 한다.
+ 일급 객체는 전달 인자로 보낼 수 있고, 변수/상수 등으로 저장하거나 전달 할 수 있으며, 함수의 반환 값이 될 수도 있다.
+ 
+ 참조 타입이다.
+ 함수는 클로저의 한 형태로, 이름이 있는 클로저이다.
+ 
  */
 
 divide(base:30 , success : {
@@ -472,7 +479,6 @@ doSomething {
 
 
 
-
 /*
  autoClosure
  파라미터로 전달된 일반 구문 & 함수를 클로저로 래핑(wrapping) 하는 것.
@@ -493,6 +499,9 @@ doSomeThing2(closure: 1 > 2)
 var customersInLine = ["Chris", "Alex", "Ewa", "Barry", "Daniella"]
 
 func serve(customer customerProvider : @autoclosure () -> String) {
+
+//    customersInLine.remove(at: 0)
+    
     print("now serving \(customerProvider())")
 }
 
@@ -507,3 +516,91 @@ serve(customer: customersInLine.remove(at: 0))
 //func doSomeThing2(closure : @autoclosure (Int) -> Bool) {
 //    closure()
 //}
+
+
+
+
+
+
+
+/*
+ non-escaping closure :
+ 함수 내부에서 직접 실행하기 위해서만 사용한다
+ 파라미터로 받은 클로저를 변수나 상수에 대입할 수 없고, 중첩함수에서 클로저를 사용할 경우, 중첩함수를 리턴할 수 없다.
+ 함수의 실행 흐름을 탈출하지 않아, 함수가 종료되기 전에 무조건 실행 되어야 한다.
+ 
+ @escaping :
+ 함수 실행을 벗어나서 함수가 끝난 후에도 클로저를 실행하거나,
+ 중첩함수에서 실행 후 중첩 함수를 리턴하고 싶거나, 변수 상수에 대입하고 싶은 경우에 사용하는 키워드.
+ */
+
+func doSomething4(closure: @escaping () -> Void ) {
+    let f : () -> Void = closure // @escaping를 생략하면 에러 발생.
+    
+    print("function start")
+    
+    DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+        f() // @escaping를 생략하면 에러 발생.
+    }
+    
+    print("function end")
+}
+
+doSomething4 {
+    print("closure")
+}
+
+/*
+ 아래 1,2 번이 바로 출력되고 10초 후에 3번이 출력된다.
+ 1. function start
+ 2. function end
+ 3. closure
+ */
+
+
+
+
+
+
+
+
+/*
+ 값 캡처
+ 클로저는 특정 문맥의 상수나 변수의 값을 캡처할 수 있다.
+ 즉, 원본 값이 사라져도 클로저의 body안에서 그 값을 활용할 수 있다.
+ */
+
+func makeImcrementer(forIncrement amount : Int) -> () -> Int {
+    var runningTotal = 0
+    func incrementer() -> Int {
+        runningTotal += amount
+        return runningTotal
+    }
+    return incrementer
+}
+
+let plusTen = makeImcrementer(forIncrement: 10)
+let plusTen2 = makeImcrementer(forIncrement: 10)
+let plusSeven = makeImcrementer(forIncrement: 7)
+
+let plusedTen = plusTen() //10
+let plusedTen2 = plusTen() //20
+
+plusTen() // 30
+plusTen2() // 10
+
+let plusedSeven = plusSeven() // 7
+let plusedSeven2 = plusSeven() // 14
+
+
+
+/*
+ plusTen, plusSeven이 상수이지만 runningTotal을 증가시킬 수 있었던 이유는 클로저가 참조 타입이기 때문이다.
+ 함수와 클로저를 상수나 변수에 할당할 때 실제로는 상수와 변수에 해당 함수나 클로저의 참조가 할당된다.
+ 만약 한 클로저를 두 상수나 변수에 할당하면 그 두 상수나 변수는 같은 클로저를 참조하고 있게되는 것이다.
+ 
+ 최적화를 이유로 swift는 그 값이 클로저에 의해 변경되지 않고, 클로저가 생성된 후 값이 변경되지 않는 경우 값의 복사본을 캡처하여 저장한다.
+ 또한 swift는 변수를 더 이상 필요하지 않을 때 처리하는 모든 메모리 관리를 처리한다.
+ 
+ 
+ */
