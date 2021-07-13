@@ -72,6 +72,7 @@ struct OtherPerson : FullyNamed {
 }
 
 var john = OtherPerson(fullName: "Christoper")
+print(john.fullName)
 john.fullName = "tom"
 print(john.fullName)
 
@@ -102,7 +103,8 @@ struct Person2 : Talkable2 {
 
 
 var aa = Person2.init(topic: "money", name: "jason")
-aa.talk(to: aa)
+var bb = Person2.init(topic: "coin", name: "helena")
+aa.talk(to: bb)
 
 
 
@@ -208,7 +210,7 @@ class SomeClass : readWriteSpeakble {
  
  익스텐션은 타입에 새로운 기능을 추가할 수는 있지만, 기존의 기능을 재정의 할 수는 없음.
  클래스의 상속은 클래스 타입에서만 가능하지만 익스텐션은 구조체, 클래스, 프로토콜 등에 적용이 가능함.
- 클래스의 상속은 특정 타입을 물려받아 하나의 새로운 타입을 정의하고 추가 기능을 구현하는 수직 홪장이지만, 익스텐션은 기존의 타입에 기능을 추가하는 수평 확장.
+ 클래스의 상속은 특정 타입을 물려받아 하나의 새로운 타입을 정의하고 추가 기능을 구현하는 수직 확장이지만, 익스텐션은 기존의 타입에 기능을 추가하는 수평 확장.
  
                 상속                  익스텐션
  확장           수직확장                수평확장
@@ -270,11 +272,11 @@ print(4.multiply(by: 5))
 
 number = 3
 
-print(number.multiply(by: 2))
-print(number.multiply(by: 3))
+print(number.multiply(by: 5))
+print(number.multiply(by: 7))
 
 /*
- 위 코드의 익스텐션은 Int 타입에 두 개의 연산 프로토콜을 추가한 것.
+ 위 코드의 익스텐션은 Int 타입에 연산 프로토콜을 추가한 것.
  int 타입의 인스턴스가 홀수인지 짝수인지 판별하여 bool 타입으로 알려주는 연산 프로퍼티.
  익스텐션으로 Int 타입에 추가해준 연산 프로퍼티는 Int타입의 어떤 인스턴스에도 사용이 가능하다.
  위의 코드처럼 인스턴스 연산 프로퍼티를 추가할 수도 있으며, static키워드를 사용하여 타입 연산 프로퍼티도 추가할 수 있다.
